@@ -19,6 +19,7 @@ public class Login extends JFrame implements ActionListener {
 	private JTextField txtUsuari;
 	private JTextField txtContrasenya;
 	private JButton btnNewButton;
+	public static String nombre;
 
 	/**
 	 * Launch the application.
@@ -40,21 +41,26 @@ public class Login extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Login() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1366, 768);
+		//setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(65, 129, 190));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
+		
+		
 		JLabel lblValnciaEvents = new JLabel("VAL\u00C8NCIA EVENTS");
-		lblValnciaEvents.setBounds(0, 47, 1319, 99);
+		lblValnciaEvents.setBounds(0, 47, 1360, 99);
 		lblValnciaEvents.setFont(new Font("Bebas Neue", Font.PLAIN, 77));
 		lblValnciaEvents.setForeground(Color.WHITE);
 		lblValnciaEvents.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblValnciaEvents);
 		JPanel panel = new JPanel();
-		panel.setBounds(466, 157, 384, 354);
+		panel.setBounds(485, 157, 384, 354);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		JLabel lblNewLabel = new JLabel("Accedir");
@@ -103,8 +109,10 @@ public class Login extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnNewButton) {
 
-		    if(LoginActivity.comprarLogin(txtUsuari.getText().toString(), txtContrasenya.getText().toString()) == true){
+		    nombre = LoginActivity.comprarLogin(txtUsuari.getText().toString(), txtContrasenya.getText().toString());
+		    if(nombre != null){
 			setVisible(false);
+			
 			PanelAfegirEvent panel = new PanelAfegirEvent();
 			panel.setVisible(true);
 		    }

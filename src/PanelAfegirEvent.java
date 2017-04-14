@@ -52,14 +52,16 @@ public class PanelAfegirEvent extends JFrame {
      * Create the frame.
      */
     public PanelAfegirEvent() {
+    	setResizable(false);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setBounds(100, 100, 1366, 768);
+	//setBounds(100, 100, 1280, 720);
 	contentPane = new JPanel();
 	contentPane.setBackground(new Color(65, 129, 190));
 	contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 	setContentPane(contentPane);
-	contentPane.setLayout(null);
-	contentPane.setLayout(null);
+	contentPane.setLayout(null);	
+	setLocationRelativeTo(null);
 	
 	JLabel lblValenciaeventsnet = new JLabel("www.valenciaevents.net");
 	lblValenciaeventsnet.setFont(new Font("Roboto Th", Font.PLAIN, 66));
@@ -79,10 +81,11 @@ public class PanelAfegirEvent extends JFrame {
 	lblVersiValncia.setBounds(45, 52, 193, 14);
 	contentPane.add(lblVersiValncia);
 	
-	JLabel label = new JLabel("");
+	JLabel label = new JLabel(Login.nombre);
+	label.setHorizontalAlignment(SwingConstants.LEFT);
 	label.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	label.setForeground(Color.WHITE);
-	label.setBounds(99, 26, 210, 14);
+	label.setBounds(99, 22, 297, 19);
 	contentPane.add(label);
 	
 	JButton btnNewButton = new JButton("AFEGIR EVENT");
@@ -92,13 +95,13 @@ public class PanelAfegirEvent extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 		}
 	});
-	btnNewButton.setBounds(977, 34, 143, 43);
+	btnNewButton.setBounds(956, 34, 164, 43);
 	contentPane.add(btnNewButton);
 	
 	JButton btnModificar = new JButton("MODIFICAR");
 	btnModificar.setBackground(Color.LIGHT_GRAY);
 	btnModificar.setFont(new Font("Tahoma", Font.BOLD, 15));
-	btnModificar.setBounds(1144, 34, 134, 43);
+	btnModificar.setBounds(1144, 34, 155, 43);
 	contentPane.add(btnModificar);
 	
 	JSeparator separator = new JSeparator();
