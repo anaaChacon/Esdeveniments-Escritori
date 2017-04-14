@@ -1,18 +1,14 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import controlador.LoginActivity;
 import java.awt.Color;
-import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.SystemColor;
@@ -52,13 +48,13 @@ public class Login extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JLabel lblValnciaEvents = new JLabel("VAL\u00C8NCIA EVENTS");
-		lblValnciaEvents.setBounds(10, 47, 1350, 99);
+		lblValnciaEvents.setBounds(0, 47, 1319, 99);
 		lblValnciaEvents.setFont(new Font("Bebas Neue", Font.PLAIN, 77));
 		lblValnciaEvents.setForeground(Color.WHITE);
 		lblValnciaEvents.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblValnciaEvents);
 		JPanel panel = new JPanel();
-		panel.setBounds(495, 164, 384, 354);
+		panel.setBounds(466, 157, 384, 354);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		JLabel lblNewLabel = new JLabel("Accedir");
@@ -71,7 +67,6 @@ public class Login extends JFrame implements ActionListener {
 		txtUsuari.setForeground(SystemColor.activeCaptionBorder);
 		txtUsuari.setHorizontalAlignment(SwingConstants.CENTER);
 		txtUsuari.setFont(new Font("Roboto Lt", Font.ITALIC, 22));
-		txtUsuari.setText("Usuari");
 		txtUsuari.setBounds(50, 113, 289, 41);
 		panel.add(txtUsuari);
 		txtUsuari.setColumns(10);
@@ -79,7 +74,6 @@ public class Login extends JFrame implements ActionListener {
 		txtContrasenya.setForeground(SystemColor.activeCaptionBorder);
 		txtContrasenya.setHorizontalAlignment(SwingConstants.CENTER);
 		txtContrasenya.setFont(new Font("Roboto Lt", Font.ITALIC, 20));
-		txtContrasenya.setText("Contrasenya");
 		txtContrasenya.setBounds(50, 165, 289, 41);
 		panel.add(txtContrasenya);
 		txtContrasenya.setColumns(10);
@@ -100,7 +94,7 @@ public class Login extends JFrame implements ActionListener {
 		JLabel lblValenciaeventsnet = new JLabel("www.valenciaevents.net");
 		lblValenciaeventsnet.setFont(new Font("Roboto Th", Font.PLAIN, 66));
 		lblValenciaeventsnet.setForeground(Color.WHITE);
-		lblValenciaeventsnet.setBounds(645, 628, 705, 90);
+		lblValenciaeventsnet.setBounds(572, 628, 778, 90);
 		contentPane.add(lblValenciaeventsnet);
 	}
 
@@ -109,9 +103,14 @@ public class Login extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnNewButton) {
 
+		    if(LoginActivity.comprarLogin(txtUsuari.getText().toString(), txtContrasenya.getText().toString()) == true){
 			setVisible(false);
-			Panel panel = new Panel();
+			PanelAfegirEvent panel = new PanelAfegirEvent();
 			panel.setVisible(true);
+		    }
+		    else{
+			setVisible(true);
+		    }
 		}
 
 	}
