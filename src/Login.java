@@ -1,15 +1,28 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import controlador.LoginActivity;
+
+
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.SystemColor;
 
@@ -17,7 +30,7 @@ public class Login extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txtUsuari;
-	private JTextField txtContrasenya;
+	private JPasswordField txtContrasenya;
 	private JButton btnNewButton;
 	public static String nombre;
 
@@ -44,6 +57,11 @@ public class Login extends JFrame implements ActionListener {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1366, 768);
+		setTitle("València Events");
+		ImageIcon logoV = new ImageIcon("./imagenes/login.png");
+		Image logo = logoV.getImage();
+		
+		setIconImage(logo);
 		//setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(65, 129, 190));
@@ -76,7 +94,7 @@ public class Login extends JFrame implements ActionListener {
 		txtUsuari.setBounds(50, 113, 289, 41);
 		panel.add(txtUsuari);
 		txtUsuari.setColumns(10);
-		txtContrasenya = new JTextField();
+		txtContrasenya = new JPasswordField();
 		txtContrasenya.setForeground(SystemColor.activeCaptionBorder);
 		txtContrasenya.setHorizontalAlignment(SwingConstants.CENTER);
 		txtContrasenya.setFont(new Font("Roboto Lt", Font.ITALIC, 20));
@@ -101,6 +119,22 @@ public class Login extends JFrame implements ActionListener {
 		lblValenciaeventsnet.setFont(new Font("Roboto Th", Font.PLAIN, 66));
 		lblValenciaeventsnet.setForeground(Color.WHITE);
 		lblValenciaeventsnet.setBounds(572, 628, 778, 90);
+		lblValenciaeventsnet.addMouseListener(new MouseAdapter()
+		{
+	    	public void mouseClicked(MouseEvent ex){
+	    		try {
+	    		    Desktop.getDesktop().browse(new URI("http://valenciaevents.net/"));
+	    		} catch (IOException e1) {
+	    		    
+	    		    e1.printStackTrace();
+	    		} catch (URISyntaxException e) {
+	    		    
+	    		    e.printStackTrace();
+	    		
+	    		}
+	    	}
+	    
+		});
 		contentPane.add(lblValenciaeventsnet);
 	}
 
@@ -108,8 +142,11 @@ public class Login extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnNewButton) {
+		    
+		    char[]arrayC = txtContrasenya.getPassword();
+		    String contra = new String(arrayC);
 
-		    nombre = LoginActivity.comprarLogin(txtUsuari.getText().toString(), txtContrasenya.getText().toString());
+		    nombre = LoginActivity.comprarLogin(txtUsuari.getText().toString(), contra);
 		    if(nombre != null){
 			setVisible(false);
 			

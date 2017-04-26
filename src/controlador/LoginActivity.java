@@ -26,10 +26,10 @@ public class LoginActivity {
 	try{	
 	    //Connection with database
 	    Class.forName("com.mysql.jdbc.Driver");
-	    Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/qxm773", "root", "campus");
+	    //Connection conexion = DriverManager.getConnection("jdbc:mysql://mysql.hostinger.es:3306/u468011279_event", "u468011279_ana", "Lesron1");
 	    
 	    System.out.print("Conexión realizada...");
-	    //Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/qxm773", "qxm773", "cWCUNRwG85");			
+	    Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/qxm773", "root", "campus");			
 	    Statement st = conexion.createStatement();
 	    
 	    //Realize other consult for organizators
