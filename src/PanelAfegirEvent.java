@@ -82,9 +82,6 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
     private JScrollPane scroll;
     private static JTable table_1;
     private static SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-    private LocalTime horaInicio1, horaFin1;
-    private Date fechaInicio, fechaFin;
-    private String fechaIniciFormateada, fechaFinFormateada, itemSeleccionado;
 
     /**
      * Launch the application.
@@ -472,6 +469,25 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	
 	if(e.getSource() == btnModificar){
 	    
+	    LocalTime horaInicio1 = LocalTime.parse(campoHoraInici.getText().toString() +":"+ campoMinutoInici.getText().toString());
+	    LocalTime horaFin1 = LocalTime.parse(campoHoraFin.getText().toString() +":"+ campoMinutoFin.getText().toString());
+	    
+	    /*Capturar la fecha inicio y parsearla a Date*/
+	    Date fechaInicio = (Date) campoFechaInici.getDate();
+	    	  
+	    String fechaIniciFormateada = formato.format(fechaInicio);
+	    
+	    /*Capturar la fecha fin y parsearla a Date*/
+	    Date fechaFin = (Date) campoFechaFin.getDate();
+	    	  		
+	    String fechaFinFormateada = formato.format(fechaFin);
+	    	    
+	    //Capturar el item del combobox seleccionado
+	    String itemSeleccionado = (String) comboCategoria.getSelectedItem();
+	    
+	  //Obtengo el nombre del evento seleccionado en la tabla
+	    String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);
+	    
 	    Evento evento = new Evento();
 	    
 	    evento.setNombre(campoNombreEvento.getText().toString());
@@ -488,7 +504,7 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	    evento.setIdOrganizador(MetodosBaseDeDatos.consultarIdOrganizador(Login.nombre));
 	    
 	    
-	    MetodosBaseDeDatos.modificarEvento(evento);
+	    MetodosBaseDeDatos.modificarEvento(evento, nombreEvento);
 	    
 	    resetearCampos();
 	    
@@ -499,25 +515,20 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	    /*Hacemos uso del metodo insertar lugar para luego poder insertar la id del lugar*/
 	    MetodosBaseDeDatos.anyadirLugar(campoLlocEvento.getText().toString()); 
 	      
-	    horaInicio1 = LocalTime.parse(campoHoraInici.getText().toString() +":"+ campoMinutoInici.getText().toString());
-	    horaFin1 = LocalTime.parse(campoHoraFin.getText().toString() +":"+ campoMinutoFin.getText().toString());
+	    LocalTime horaInicio1 = LocalTime.parse(campoHoraInici.getText().toString() +":"+ campoMinutoInici.getText().toString());
+	    LocalTime horaFin1 = LocalTime.parse(campoHoraFin.getText().toString() +":"+ campoMinutoFin.getText().toString());
 	    
 	    /*Capturar la fecha inicio y parsearla a Date*/
-	    fechaInicio = (Date) campoFechaInici.getDate();
-	    	  
-	    System.out.println("Fecha sin formater: " + fechaInicio);
-	    System.out.println("Fecha formateada: " + formato.format(fechaInicio));
-		
-	    fechaIniciFormateada = formato.format(fechaInicio);
+	    Date fechaInicio = (Date) campoFechaInici.getDate();
+	    
+	    String fechaIniciFormateada = formato.format(fechaInicio);
 	    
 	    /*Capturar la fecha fin y parsearla a Date*/
-	    fechaFin = (Date) campoFechaFin.getDate();
-	    	  
-		
-	    fechaFinFormateada = formato.format(fechaFin);
+	    Date fechaFin = (Date) campoFechaFin.getDate();
+	    String fechaFinFormateada = formato.format(fechaFin);
 	    	    
 	    //Capturar el item del combobox seleccionado
-	    itemSeleccionado = (String) comboCategoria.getSelectedItem();
+	    String itemSeleccionado = (String) comboCategoria.getSelectedItem();
 	    
 	    //Instanciar evento
 	    Evento evento = new Evento();
@@ -538,9 +549,9 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	    MetodosBaseDeDatos.anyadirEvento(evento);
 	    	   
 	    resetearCampos();
-	       
+		   
 	    modelo.addRow(new Object[]{evento.getNombre()});
-	  
+		   
 	}
 	
 	if(e.getSource() == btnEliminar){

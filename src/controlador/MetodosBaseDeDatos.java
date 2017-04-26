@@ -70,7 +70,7 @@ public class MetodosBaseDeDatos {
     }
     
   //Metodo para modificar un evento
-    public static void modificarEvento(Evento evento) {
+    public static void modificarEvento(Evento evento, String nombre) {
 	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
 	Conexion conex = new Conexion();
 	//bloque try - catch
@@ -88,7 +88,8 @@ public class MetodosBaseDeDatos {
 			+ " foto_principal = '"+evento.getFotoPrincipal()+"',"
 			+ " idCategoria = '"+evento.getIdCategoria()+"',"
 			+ " idLugar = '"+evento.getIdLugar()+"',"
-			+ " idOrganizador = '"+evento.getIdOrganizador()+"';");
+			+ " idOrganizador = '"+evento.getIdOrganizador()+"'"
+			+ " WHERE nombre = '"+nombre+"';");
 		
 		JOptionPane.showMessageDialog(null,"Se ha modificado correctamente el evento", "Información",JOptionPane.INFORMATION_MESSAGE);
 		insercionEvento.close();
