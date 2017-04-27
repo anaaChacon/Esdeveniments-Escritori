@@ -1,3 +1,4 @@
+package vista;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -6,8 +7,10 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +43,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -58,7 +62,7 @@ import modelo.Evento;
 
 import com.toedter.calendar.JDateChooser;
 
-public class PanelAfegirEvent extends JFrame implements ActionListener {
+public class PanelGestionarEvent extends JFrame implements ActionListener {
 
     private JPanel contentPane;
     private static JTextField campoNombreEvento;
@@ -82,6 +86,7 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
     private JScrollPane scroll;
     private static JTable table_1;
     private static SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+    
 
     /**
      * Launch the application.
@@ -90,7 +95,7 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		try {
-		    PanelAfegirEvent frame = new PanelAfegirEvent();
+		    PanelGestionarEvent frame = new PanelGestionarEvent();
 		    frame.setVisible(true);
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -103,7 +108,7 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
      * Create the frame.
      */
     @SuppressWarnings("null")
-    public PanelAfegirEvent() {
+    public PanelGestionarEvent() {
     	setResizable(false);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setBounds(100, 100, 1366, 768);
@@ -161,10 +166,14 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	etiquetaOrganizador.setBounds(99, 22, 603, 19);
 	contentPane.add(etiquetaOrganizador);
 	
+	Border emptyBorder = BorderFactory.createEmptyBorder();
+	
 	btnAnyadir = new JButton("AFEGIR EVENT");
 	btnAnyadir.setBackground(Color.LIGHT_GRAY);
 	btnAnyadir.setFont(new Font("Tahoma", Font.BOLD, 15));
 	btnAnyadir.addActionListener(this); 
+	btnAnyadir.setFocusable(false);
+	btnAnyadir.setBorder(emptyBorder);
 	btnAnyadir.setBounds(712, 22, 164, 43);
 	contentPane.add(btnAnyadir);
 	
@@ -172,6 +181,8 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	btnModificar.setBackground(Color.LIGHT_GRAY);
 	btnModificar.setFont(new Font("Tahoma", Font.BOLD, 15));
 	btnModificar.setBounds(910, 23, 180, 43);
+	btnModificar.setFocusable(false);
+	btnModificar.setBorder(emptyBorder);
 	btnModificar.addActionListener(this);
 	contentPane.add(btnModificar);
 	
@@ -317,11 +328,16 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 15));
 	btnEliminar.setBackground(Color.LIGHT_GRAY);
 	btnEliminar.setBounds(1123, 22, 180, 43);
+	btnEliminar.setFocusable(false);
+	btnEliminar.setBorder(emptyBorder);
 	btnEliminar.addActionListener(this);
 	contentPane.add(btnEliminar);
 	
 	campoFechaInici = new JDateChooser();
+	campoFechaInici.getCalendarButton().setBackground(new Color(25, 25, 112));
 	campoFechaInici.setBounds(350, 341, 119, 34);
+	campoFechaInici.setFocusable(false);
+	campoFechaInici.setBorder(emptyBorder);
 	contentPane.add(campoFechaInici);
 	
 	JLabel lblDataFin = new JLabel("DATA FIN");
@@ -331,7 +347,10 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	contentPane.add(lblDataFin);
 	
 	campoFechaFin = new JDateChooser();
+	campoFechaFin.getCalendarButton().setBackground(new Color(25, 25, 112));
 	campoFechaFin.setBounds(350, 443, 119, 34);
+	campoFechaFin.setFocusable(false);
+	campoFechaFin.setBorder(emptyBorder);
 	contentPane.add(campoFechaFin);
 	
 	JLabel lblHoraFin = new JLabel("HORA FIN");
@@ -371,24 +390,44 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	contentPane.add(campoImagenUri2);
 	
 	botonBuscar = new JButton("Buscar imagen");
+	botonBuscar.setForeground(Color.WHITE);
+	botonBuscar.setBackground(new Color(25, 25, 112));
 	botonBuscar.setBounds(1048, 242, 139, 23);
+	botonBuscar.setFocusable(false);
+	botonBuscar.setBorder(emptyBorder);
 	botonBuscar.addActionListener(this);
+	botonBuscar.setFocusable(false);
 	contentPane.add(botonBuscar);
 	
 	
 	botonListo = new JButton("Listo");
+	botonListo.setForeground(new Color(255, 255, 255));
+	botonListo.setBackground(new Color(25, 25, 112));
 	botonListo.setBounds(1213, 242, 90, 23);
+	botonListo.setFocusable(false);
+	botonListo.setBorder(emptyBorder);
 	botonListo.addActionListener(this);
+	botonListo.setFocusable(false);
 	contentPane.add(botonListo);
 	
 	botonBuscar2 = new JButton("Buscar imagen");
+	botonBuscar2.setForeground(new Color(255, 255, 255));
+	botonBuscar2.setBackground(new Color(25, 25, 112));
 	botonBuscar2.setBounds(1048, 366, 139, 23);
 	botonBuscar2.addActionListener(this);
+	botonBuscar2.setFocusable(false);
+	botonBuscar2.setBorder(emptyBorder);
+	botonBuscar2.setFocusable(false);
 	contentPane.add(botonBuscar2);
 	
 	botonListo2 = new JButton("Listo");
+	botonListo2.setForeground(new Color(255, 255, 255));
+	botonListo2.setBackground(new Color(25, 25, 112));
 	botonListo2.setBounds(1213, 364, 90, 23);
+	botonListo2.setFocusable(false);
+	botonListo2.setBorder(emptyBorder);
 	botonListo2.addActionListener(this);
+	botonListo2.setFocusable(false);
 	contentPane.add(botonListo2);
 	
 	JLabel lblNewLabel_1 = new JLabel("VISTA");
@@ -426,11 +465,10 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	
 	
 	modelo.addColumn("Nombre");
-	for(int i = 0; i < MetodosBaseDeDatos.consultarNombreEventos().size(); i++){
-	   
-	   modelo.addRow(new Object[]{MetodosBaseDeDatos.consultarNombreEventos().get(i).toString()});
-	   
-	}
+	
+	mostrarDatos();
+	
+	 
 	
 	table_1 = new JTable(modelo){
 	        /**
@@ -468,6 +506,11 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 	
 	if(e.getSource() == btnModificar){
+	    
+	    if(comprobarCamposVacios() == true){
+		JOptionPane.showMessageDialog(null,"No ha seleccionado ningún evento.","Advertencia!", JOptionPane.WARNING_MESSAGE);
+	    }
+	    else{
 	    
 	    LocalTime horaInicio1 = LocalTime.parse(campoHoraInici.getText().toString() +":"+ campoMinutoInici.getText().toString());
 	    LocalTime horaFin1 = LocalTime.parse(campoHoraFin.getText().toString() +":"+ campoMinutoFin.getText().toString());
@@ -507,11 +550,22 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	    MetodosBaseDeDatos.modificarEvento(evento, nombreEvento);
 	    
 	    resetearCampos();
-	    
+	   //Primero eliminamos todas las filas de la tabla 
+	   for(int i = modelo.getRowCount()-1; i >= 0 ; i--){
+	       modelo.removeRow(i);
+	   }
+	   //Mostramos lo eventos y se añaden al JTable
+	    mostrarDatos();
+	  }
 	}
 	
 	if(e.getSource() == btnAnyadir){
 	    
+	    
+	    if(comprobarCamposVacios() == true){
+		JOptionPane.showMessageDialog(null,"Los campos no pueden quedar vacíos. Por favor, rellenelos!","Advertencia!", JOptionPane.WARNING_MESSAGE);
+	    }
+	    else{
 	    /*Hacemos uso del metodo insertar lugar para luego poder insertar la id del lugar*/
 	    MetodosBaseDeDatos.anyadirLugar(campoLlocEvento.getText().toString()); 
 	      
@@ -551,15 +605,14 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	    resetearCampos();
 		   
 	    modelo.addRow(new Object[]{evento.getNombre()});
-		   
+	   }   
 	}
 	
 	if(e.getSource() == btnEliminar){
 	    
 	    String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);
 	    modelo.removeRow(table_1.getSelectedRow());
-	    
-	    //System.out.println("\n\n--------------\nEvento eliminado: " + nombreEvento);
+	   
 	    MetodosBaseDeDatos.eliminarEvento(nombreEvento);
 	}
 	
@@ -645,6 +698,28 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 	ImageIcon iconImage = new ImageIcon(img);
 	
 	return iconImage;
+    }
+    
+    public static Boolean comprobarCamposVacios(){
+	
+	Boolean camposVacios = true;
+	
+	if(campoNombreEvento.getText().toString().isEmpty() || campoLlocEvento.getText().toString().isEmpty()
+		|| campoFechaInici.getDate().toString().isEmpty() || campoFechaFin.getDate().toString().isEmpty()
+		|| campoHoraFin.getText().toString().isEmpty() || campoHoraInici.getText().toString().isEmpty()
+		|| campoMinutoInici.getText().toString().isEmpty() || campoMinutoFin.getText().toString().isEmpty()
+		|| comboCategoria.getSelectedItem().toString().isEmpty() || campoDescripcion.getText().toString().isEmpty()
+		|| campoInformacioSecundaria.getText().toString().isEmpty() || campoImagenUri.getText().toString().isEmpty()
+		|| campoImagenUri2.getText().toString().isEmpty() || imagenMiniatura.getIcon() == null || imagenPrincipal.getIcon() == null){
+	    
+	    camposVacios = true;
+	}
+	else{
+	    camposVacios = false;
+	}
+	
+	
+	return camposVacios;
     }
     
     public static void resetearCampos(){
@@ -739,5 +814,14 @@ public class PanelAfegirEvent extends JFrame implements ActionListener {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	    }
+    }
+    //Metodo para mostrar los datos de la tabla
+    public static void mostrarDatos(){
+	
+	for(int i = 0; i < MetodosBaseDeDatos.consultarNombreEventos().size(); i++){
+		   
+		   modelo.addRow(new Object[]{MetodosBaseDeDatos.consultarNombreEventos().get(i).toString()});
+		   
+		}
     }
 }

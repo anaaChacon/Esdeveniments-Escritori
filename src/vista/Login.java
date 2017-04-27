@@ -1,7 +1,9 @@
+package vista;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import controlador.LoginActivity;
 
@@ -22,6 +24,7 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.JTextField;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.SystemColor;
@@ -33,6 +36,8 @@ public class Login extends JFrame implements ActionListener {
 	private JPasswordField txtContrasenya;
 	private JButton btnNewButton;
 	public static String nombre;
+	private Border emptyBorder;
+	
 
 	/**
 	 * Launch the application.
@@ -70,6 +75,7 @@ public class Login extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		
+		emptyBorder = BorderFactory.createEmptyBorder();
 		
 		JLabel lblValnciaEvents = new JLabel("VAL\u00C8NCIA EVENTS");
 		lblValnciaEvents.setBounds(0, 47, 1360, 99);
@@ -103,6 +109,8 @@ public class Login extends JFrame implements ActionListener {
 		txtContrasenya.setColumns(10);
 		btnNewButton = new JButton("ENTRAR");
 		btnNewButton.addActionListener(this);
+		btnNewButton.setFocusable(false);
+		btnNewButton.setBorder(emptyBorder);
 		btnNewButton.setFont(new Font("Roboto Bk", Font.PLAIN, 24));
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(new Color(63, 127, 188));
@@ -150,7 +158,7 @@ public class Login extends JFrame implements ActionListener {
 		    if(nombre != null){
 			setVisible(false);
 			
-			PanelAfegirEvent panel = new PanelAfegirEvent();
+			PanelGestionarEvent panel = new PanelGestionarEvent();
 			panel.setVisible(true);
 		    }
 		    else{
