@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
+import conexion.Conexion;
+
 public class LoginActivity {
     
     public static String comprarLogin(String user, String password){
@@ -24,13 +26,9 @@ public class LoginActivity {
 	    
 	//Realize one try-catch	
 	try{	
-	    //Connection with database
-	    Class.forName("com.mysql.jdbc.Driver");
-	    //Connection conexion = DriverManager.getConnection("jdbc:mysql://mysql.hostinger.es:3306/u468011279_event", "u468011279_ana", "Lesron1");
-	    
-	    System.out.print("Conexión realizada...");
-	    Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/qxm773", "root", "campus");			
-	    Statement st = conexion.createStatement();
+	  //Instanciamos la clase Conexion para establecer la conexión a la base de datos
+	    Conexion conex = new Conexion();			
+	    Statement st = conex.getConnection().createStatement();
 	    
 	    //Realize other consult for organizators
 	    ResultSet rs = st.executeQuery("SELECT *"
@@ -59,6 +57,7 @@ public class LoginActivity {
 	    
 	    rs.close();
 	    st.close();
+	    conex.desconectar();
 	    
 	}catch(SQLException ex){
 		System.out.println("Error de mySQL");

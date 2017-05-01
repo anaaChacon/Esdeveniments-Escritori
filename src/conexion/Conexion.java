@@ -10,9 +10,9 @@ import java.sql.*;
  */
 public class Conexion {
    static String bd = "qxm773";
-   static String login = "root";
-   static String password = "campus";
-   static String url = "jdbc:mysql://localhost/"+bd;
+   static String login = "root";//admin
+   static String password = "";//Lesron1
+   static String url = "jdbc:mysql://127.0.0.1/"+bd;//127.0.0.1:3306 - 84.123.121.34:8080 - 84.123.121.34
 
    Connection conn = null;
 
