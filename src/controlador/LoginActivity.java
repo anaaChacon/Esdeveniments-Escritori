@@ -1,25 +1,19 @@
 package controlador;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import javax.swing.JOptionPane;
-
 import conexion.Conexion;
 
 public class LoginActivity {
     
     public static String comprarLogin(String user, String password){
 	
-	//boolean datosCorrectos = false;
 	String nombre = null;
 	
 	if(user.isEmpty() || password.isEmpty()){
 	    JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-	    //datosCorrectos = false;
 	}
 	
 	if(!user.isEmpty() && !password.isEmpty()){
@@ -40,20 +34,11 @@ public class LoginActivity {
 	    if(rs.next()){
 		
 		rs.first();
-	    
-		String usuario = rs.getString(2);
-		String contrasenya = rs.getString(3);
 		nombre = rs.getString(4);
-	    
-		System.out.println("\nUsuario: " + usuario + "\nContraseña: " + contrasenya);
-		//datosCorrectos = true;
-	    
 	    }
 	    else{
 		JOptionPane.showMessageDialog(null, "Los datos no son correctos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-		//datosCorrectos = false;
 	    }
-	    
 	    
 	    rs.close();
 	    st.close();
@@ -68,7 +53,7 @@ public class LoginActivity {
 	}
      }
 	
-	//return datosCorrectos;
+	//return name;
 	return nombre;
     }
 

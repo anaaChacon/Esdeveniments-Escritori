@@ -1,10 +1,9 @@
 package vista;
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -12,13 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import com.toedter.calendar.JCalendar;
-
-import javax.swing.JTextPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -28,24 +21,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-//import java.sql.Date;
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.awt.event.ActionEvent;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Desktop;
-
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -54,16 +37,18 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import java.awt.SystemColor;
-import java.awt.Label;
-import com.toedter.calendar.JDayChooser;
-
 import controlador.MetodosBaseDeDatos;
 import modelo.Evento;
+import modelo.Lugar;
 
 import com.toedter.calendar.JDateChooser;
 
 public class PanelGestionarEvent extends JFrame implements ActionListener {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private static JTextField campoNombreEvento;
     private static JTextField campoLlocEvento;
@@ -83,9 +68,17 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
     private static JTextArea campoDescripcion;
     private static JComboBox<String> comboCategoria;
     private static DefaultTableModel modelo;
-    private JScrollPane scroll;
+    private JScrollPane scroll, scroll2;
     private static JTable table_1;
     private static SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+    private Evento evento;
+    private Lugar lugar;
+    private static JTextField campoDireccioLloc;
+    private static JTextField campoLatitud;
+    private static JTextField campoLongitud;
+    private static JTextField campoImagenLloc;
+    private static JTextArea textAreaImformacioLloc;
+    private JButton btnExit;
     
 
     /**
@@ -107,7 +100,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
     /**
      * Create the frame.
      */
-    @SuppressWarnings("null")
+    
     public PanelGestionarEvent() {
     	setResizable(false);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,46 +117,23 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	contentPane.setLayout(null);	
 	setLocationRelativeTo(null);
 	
-	JLabel lblValenciaeventsnet = new JLabel("www.valenciaevents.net");
-	lblValenciaeventsnet.setToolTipText("Haga clic para visitar la web oficial.");
-	lblValenciaeventsnet.setFont(new Font("Roboto Th", Font.PLAIN, 66));
-	lblValenciaeventsnet.setForeground(Color.WHITE);
-	lblValenciaeventsnet.setBounds(596, 638, 754, 90);
-	lblValenciaeventsnet.addMouseListener(new MouseAdapter()
-		{
-	    	public void mouseClicked(MouseEvent ex){
-	    		try {
-	    		    Desktop.getDesktop().browse(new URI("http://valenciaevents.net/"));
-	    		} catch (IOException e1) {
-	    		    
-	    		    e1.printStackTrace();
-	    		} catch (URISyntaxException e) {
-	    		    
-	    		    e.printStackTrace();
-	    		
-	    		}
-	    	}
-	    
-		});
-	contentPane.add(lblValenciaeventsnet);
-	
 	JLabel lblUsuari = new JLabel("Usuari:");
 	lblUsuari.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	lblUsuari.setForeground(Color.WHITE);
-	lblUsuari.setBounds(45, 22, 63, 19);
+	lblUsuari.setBounds(97, 21, 63, 19);
 	contentPane.add(lblUsuari);
 	
 	JLabel lblVersiValncia = new JLabel("Versi\u00F3 0.1.1 Val\u00E8ncia Events");
 	lblVersiValncia.setForeground(Color.WHITE);
 	lblVersiValncia.setFont(new Font("Tahoma", Font.PLAIN, 15));
-	lblVersiValncia.setBounds(45, 52, 193, 14);
+	lblVersiValncia.setBounds(97, 51, 193, 14);
 	contentPane.add(lblVersiValncia);
 	
 	etiquetaOrganizador = new JLabel(Login.nombre);
 	etiquetaOrganizador.setHorizontalAlignment(SwingConstants.LEFT);
 	etiquetaOrganizador.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	etiquetaOrganizador.setForeground(Color.WHITE);
-	etiquetaOrganizador.setBounds(99, 22, 603, 19);
+	etiquetaOrganizador.setBounds(152, 22, 550, 19);
 	contentPane.add(etiquetaOrganizador);
 	
 	Border emptyBorder = BorderFactory.createEmptyBorder();
@@ -188,7 +158,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	
 	JSeparator separator = new JSeparator();
 	separator.setForeground(Color.WHITE);
-	separator.setBounds(28, 83, 1301, 7);
+	separator.setBounds(10, 83, 1319, 7);
 	contentPane.add(separator);
 	
 	JLabel lblNewLabel = new JLabel("Recorda, la llengua de l'APP \u00E9s la valenci\u00E0, utilitza'l sempre que pugues");
@@ -235,44 +205,44 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	JLabel lblData = new JLabel("DATA INICI");
 	lblData.setForeground(Color.WHITE);
 	lblData.setFont(new Font("Tahoma", Font.BOLD, 15));
-	lblData.setBounds(350, 316, 96, 14);
+	lblData.setBounds(350, 398, 96, 14);
 	contentPane.add(lblData);
 	
 	JLabel lblHora = new JLabel("HORA INICI");
 	lblHora.setFont(new Font("Tahoma", Font.BOLD, 15));
 	lblHora.setForeground(Color.WHITE);
-	lblHora.setBounds(495, 316, 96, 14);
+	lblHora.setBounds(495, 398, 96, 14);
 	contentPane.add(lblHora);
 	
 	campoHoraInici = new JTextField();
-	campoHoraInici.setBounds(495, 341, 36, 34);
+	campoHoraInici.setBounds(495, 423, 36, 34);
 	contentPane.add(campoHoraInici);
 	campoHoraInici.setColumns(10);
 	
 	
 	campoMinutoInici = new JTextField();
 	campoMinutoInici.setColumns(10);
-	campoMinutoInici.setBounds(548, 341, 36, 34);
+	campoMinutoInici.setBounds(548, 423, 36, 34);
 	contentPane.add(campoMinutoInici);
 	
 	JSeparator separator_1 = new JSeparator();
 	separator_1.setForeground(Color.WHITE);
-	separator_1.setBounds(536, 348, 5, 7);
+	separator_1.setBounds(536, 430, 5, 7);
 	contentPane.add(separator_1);
 	
 	JSeparator separator_2 = new JSeparator();
 	separator_2.setForeground(Color.WHITE);
-	separator_2.setBounds(536, 366, 5, 7);
+	separator_2.setBounds(536, 448, 5, 7);
 	contentPane.add(separator_2);
 	
 	JLabel lblCategoria = new JLabel("CATEGORIA");
 	lblCategoria.setFont(new Font("Tahoma", Font.BOLD, 15));
 	lblCategoria.setForeground(Color.WHITE);
-	lblCategoria.setBounds(350, 515, 96, 19);
+	lblCategoria.setBounds(702, 607, 96, 19);
 	contentPane.add(lblCategoria);
 	
 	comboCategoria = new JComboBox<String>();
-	comboCategoria.setBounds(350, 545, 272, 34);
+	comboCategoria.setBounds(702, 637, 272, 34);
 	
 	
 	for(int i = 0; i < MetodosBaseDeDatos.consultarCategorias().size(); i++){
@@ -292,6 +262,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	scroll.setBounds(702, 196, 261, 191);
 	contentPane.add(scroll);
 	
+	
 	//JTextArea textArea = new JTextArea();
 	
 	
@@ -304,24 +275,24 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	JLabel lblInformaciSecundaria = new JLabel("INFORMACI\u00D3 SECUNDARIA");
 	lblInformaciSecundaria.setForeground(Color.WHITE);
 	lblInformaciSecundaria.setFont(new Font("Tahoma", Font.BOLD, 15));
-	lblInformaciSecundaria.setBounds(702, 398, 216, 14);
+	lblInformaciSecundaria.setBounds(702, 534, 216, 14);
 	contentPane.add(lblInformaciSecundaria);
 	
 	campoInformacioSecundaria = new JTextField();
-	campoInformacioSecundaria.setBounds(702, 426, 245, 34);
+	campoInformacioSecundaria.setBounds(702, 562, 245, 34);
 	contentPane.add(campoInformacioSecundaria);
 	campoInformacioSecundaria.setColumns(10);
 	
 	JLabel lblMiniatura = new JLabel("MINIATURA");
 	lblMiniatura.setFont(new Font("Tahoma", Font.BOLD, 15));
 	lblMiniatura.setForeground(Color.WHITE);
-	lblMiniatura.setBounds(1048, 170, 90, 14);
+	lblMiniatura.setBounds(1048, 146, 90, 14);
 	contentPane.add(lblMiniatura);
 	
 	JLabel lblImatgePrincipal = new JLabel("IMATGE PRINCIPAL");
 	lblImatgePrincipal.setForeground(Color.WHITE);
 	lblImatgePrincipal.setFont(new Font("Tahoma", Font.BOLD, 15));
-	lblImatgePrincipal.setBounds(1048, 292, 155, 14);
+	lblImatgePrincipal.setBounds(1048, 270, 155, 14);
 	contentPane.add(lblImatgePrincipal);
 	
 	btnEliminar = new JButton("ELIMINAR EVENT");
@@ -335,7 +306,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	
 	campoFechaInici = new JDateChooser();
 	campoFechaInici.getCalendarButton().setBackground(new Color(25, 25, 112));
-	campoFechaInici.setBounds(350, 341, 119, 34);
+	campoFechaInici.setBounds(350, 423, 119, 34);
 	campoFechaInici.setFocusable(false);
 	campoFechaInici.setBorder(emptyBorder);
 	contentPane.add(campoFechaInici);
@@ -343,12 +314,12 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	JLabel lblDataFin = new JLabel("DATA FIN");
 	lblDataFin.setForeground(Color.WHITE);
 	lblDataFin.setFont(new Font("Tahoma", Font.BOLD, 15));
-	lblDataFin.setBounds(350, 418, 96, 14);
+	lblDataFin.setBounds(350, 478, 96, 14);
 	contentPane.add(lblDataFin);
 	
 	campoFechaFin = new JDateChooser();
 	campoFechaFin.getCalendarButton().setBackground(new Color(25, 25, 112));
-	campoFechaFin.setBounds(350, 443, 119, 34);
+	campoFechaFin.setBounds(350, 503, 119, 34);
 	campoFechaFin.setFocusable(false);
 	campoFechaFin.setBorder(emptyBorder);
 	contentPane.add(campoFechaFin);
@@ -356,43 +327,43 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	JLabel lblHoraFin = new JLabel("HORA FIN");
 	lblHoraFin.setForeground(Color.WHITE);
 	lblHoraFin.setFont(new Font("Tahoma", Font.BOLD, 15));
-	lblHoraFin.setBounds(495, 418, 96, 14);
+	lblHoraFin.setBounds(495, 478, 96, 14);
 	contentPane.add(lblHoraFin);
 	
 	campoHoraFin = new JTextField();
 	campoHoraFin.setColumns(10);
-	campoHoraFin.setBounds(495, 443, 36, 34);
+	campoHoraFin.setBounds(495, 503, 36, 34);
 	contentPane.add(campoHoraFin);
 	
 	campoMinutoFin = new JTextField();
 	campoMinutoFin.setColumns(10);
-	campoMinutoFin.setBounds(548, 443, 36, 34);
+	campoMinutoFin.setBounds(548, 503, 36, 34);
 	contentPane.add(campoMinutoFin);
 	
 	JSeparator separator_3 = new JSeparator();
 	separator_3.setForeground(Color.WHITE);
-	separator_3.setBounds(536, 450, 5, 7);
+	separator_3.setBounds(536, 503, 5, 34);
 	contentPane.add(separator_3);
 	
 	JSeparator separator_4 = new JSeparator();
 	separator_4.setForeground(Color.WHITE);
-	separator_4.setBounds(536, 468, 5, 7);
+	separator_4.setBounds(536, 521, 5, 14);
 	contentPane.add(separator_4);
 	
 	campoImagenUri = new JTextField();
-	campoImagenUri.setBounds(1048, 198, 255, 26);
+	campoImagenUri.setBounds(1048, 174, 255, 26);
 	contentPane.add(campoImagenUri);
 	campoImagenUri.setColumns(10);
 	
 	campoImagenUri2 = new JTextField();
 	campoImagenUri2.setColumns(10);
-	campoImagenUri2.setBounds(1048, 316, 255, 26);
+	campoImagenUri2.setBounds(1048, 294, 255, 26);
 	contentPane.add(campoImagenUri2);
 	
 	botonBuscar = new JButton("Buscar imagen");
 	botonBuscar.setForeground(Color.WHITE);
 	botonBuscar.setBackground(new Color(25, 25, 112));
-	botonBuscar.setBounds(1048, 242, 139, 23);
+	botonBuscar.setBounds(1048, 211, 139, 23);
 	botonBuscar.setFocusable(false);
 	botonBuscar.setBorder(emptyBorder);
 	botonBuscar.addActionListener(this);
@@ -403,7 +374,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	botonListo = new JButton("Listo");
 	botonListo.setForeground(new Color(255, 255, 255));
 	botonListo.setBackground(new Color(25, 25, 112));
-	botonListo.setBounds(1213, 242, 90, 23);
+	botonListo.setBounds(1213, 211, 90, 23);
 	botonListo.setFocusable(false);
 	botonListo.setBorder(emptyBorder);
 	botonListo.addActionListener(this);
@@ -413,7 +384,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	botonBuscar2 = new JButton("Buscar imagen");
 	botonBuscar2.setForeground(new Color(255, 255, 255));
 	botonBuscar2.setBackground(new Color(25, 25, 112));
-	botonBuscar2.setBounds(1048, 366, 139, 23);
+	botonBuscar2.setBounds(1048, 344, 139, 23);
 	botonBuscar2.addActionListener(this);
 	botonBuscar2.setFocusable(false);
 	botonBuscar2.setBorder(emptyBorder);
@@ -423,7 +394,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	botonListo2 = new JButton("Listo");
 	botonListo2.setForeground(new Color(255, 255, 255));
 	botonListo2.setBackground(new Color(25, 25, 112));
-	botonListo2.setBounds(1213, 364, 90, 23);
+	botonListo2.setBounds(1213, 342, 90, 23);
 	botonListo2.setFocusable(false);
 	botonListo2.setBorder(emptyBorder);
 	botonListo2.addActionListener(this);
@@ -434,27 +405,27 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 	lblNewLabel_1.setForeground(Color.WHITE);
 	lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 19));
-	lblNewLabel_1.setBounds(1076, 426, 153, 19);
+	lblNewLabel_1.setBounds(1076, 501, 153, 19);
 	contentPane.add(lblNewLabel_1);
 	
 	imagenMiniatura = new JLabel("");
-	imagenMiniatura.setBounds(1035, 468, 68, 99);
+	imagenMiniatura.setBounds(1035, 543, 68, 99);
 	contentPane.add(imagenMiniatura);
 	
 	imagenPrincipal = new JLabel("");
-	imagenPrincipal.setBounds(1154, 468, 175, 99);
+	imagenPrincipal.setBounds(1154, 543, 175, 99);
 	contentPane.add(imagenPrincipal);
 	
 	JLabel lblNewLabel_4 = new JLabel("MINIATURA");
 	lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 13));
 	lblNewLabel_4.setForeground(Color.WHITE);
-	lblNewLabel_4.setBounds(1035, 582, 81, 14);
+	lblNewLabel_4.setBounds(1035, 657, 81, 14);
 	contentPane.add(lblNewLabel_4);
 	
 	JLabel lblNewLabel_5 = new JLabel("IMATGE PRINCIPAL");
 	lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 13));
 	lblNewLabel_5.setForeground(Color.WHITE);
-	lblNewLabel_5.setBounds(1178, 582, 125, 14);
+	lblNewLabel_5.setBounds(1178, 657, 125, 14);
 	contentPane.add(lblNewLabel_5);
 	
 	JScrollPane scrollPane = new JScrollPane();
@@ -467,7 +438,6 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	modelo.addColumn("Nombre");
 	
 	mostrarDatos();
-	
 	 
 	
 	table_1 = new JTable(modelo){
@@ -485,6 +455,87 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	table_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	
 	scrollPane.setViewportView(table_1);
+	
+	JLabel lblDirecci = new JLabel("DIRECCI\u00D3");
+	lblDirecci.setForeground(Color.WHITE);
+	lblDirecci.setFont(new Font("Tahoma", Font.BOLD, 15));
+	lblDirecci.setBounds(350, 316, 134, 14);
+	contentPane.add(lblDirecci);
+	
+	campoDireccioLloc = new JTextField();
+	campoDireccioLloc.setColumns(10);
+	campoDireccioLloc.setBounds(350, 341, 180, 26);
+	contentPane.add(campoDireccioLloc);
+	
+	JLabel lblLatitud = new JLabel("LATITUD");
+	lblLatitud.setForeground(Color.WHITE);
+	lblLatitud.setFont(new Font("Tahoma", Font.BOLD, 15));
+	lblLatitud.setBounds(347, 558, 134, 14);
+	contentPane.add(lblLatitud);
+	
+	campoLatitud = new JTextField();
+	campoLatitud.setColumns(10);
+	campoLatitud.setBounds(347, 583, 164, 26);
+	contentPane.add(campoLatitud);
+	
+	campoLongitud = new JTextField();
+	campoLongitud.setColumns(10);
+	campoLongitud.setBounds(347, 645, 164, 26);
+	contentPane.add(campoLongitud);
+	
+	JLabel lblLongitud = new JLabel("LONGITUD");
+	lblLongitud.setForeground(Color.WHITE);
+	lblLongitud.setFont(new Font("Tahoma", Font.BOLD, 15));
+	lblLongitud.setBounds(347, 620, 134, 14);
+	contentPane.add(lblLongitud);
+	
+	JLabel lblInformaciLloc = new JLabel("INFORMACI\u00D3 LLOC");
+	lblInformaciLloc.setForeground(Color.WHITE);
+	lblInformaciLloc.setFont(new Font("Tahoma", Font.BOLD, 15));
+	lblInformaciLloc.setBounds(702, 398, 193, 19);
+	contentPane.add(lblInformaciLloc);
+	
+	scroll2 = new JScrollPane();
+	scroll2.setBounds(703, 425, 259, 98);
+	contentPane.add(scroll2);
+	
+	textAreaImformacioLloc = new JTextArea();
+	textAreaImformacioLloc.setWrapStyleWord(true);
+	textAreaImformacioLloc.setLineWrap(true);
+	textAreaImformacioLloc.setBounds(703, 425, 259, 98);
+	scroll2.setViewportView(textAreaImformacioLloc);
+	
+	
+	JLabel lblImagenLloc = new JLabel("IMAGEN LLOC");
+	lblImagenLloc.setForeground(Color.WHITE);
+	lblImagenLloc.setFont(new Font("Tahoma", Font.BOLD, 15));
+	lblImagenLloc.setBounds(1048, 383, 139, 14);
+	contentPane.add(lblImagenLloc);
+	
+	campoImagenLloc = new JTextField();
+	campoImagenLloc.setColumns(10);
+	campoImagenLloc.setBounds(1048, 411, 255, 26);
+	contentPane.add(campoImagenLloc);
+	
+	btnExit = new JButton();
+	btnExit.setBounds(10, 21, 74, 44);
+	
+	ImageIcon iconoRefresca = new ImageIcon("./imagenes/exit.png");
+	Image imgRefresca = iconoRefresca.getImage();
+	Image otraRefresca = imgRefresca.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+	ImageIcon iconRefresca = new ImageIcon(otraRefresca);
+	btnExit.setIcon(iconRefresca);
+	
+	btnExit.setBorderPainted(false);
+	btnExit.setContentAreaFilled(false);
+	btnExit.setFocusable(false);
+	btnExit.setRolloverEnabled(true);
+	
+	btnExit.addActionListener(this);
+	
+	btnExit.setFocusable(false);
+	btnExit.setRolloverEnabled(true);
+	contentPane.add(btnExit);
 	//System.out.println(MetodosBaseDeDatos.consultarNombreEventos());
 	
 	table_1.addMouseListener(new MouseAdapter(){
@@ -504,6 +555,10 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
    
     @Override
     public void actionPerformed(ActionEvent e) {
+	
+	if(e.getSource() == btnExit){
+	    System.exit(0);
+	}
 	
 	if(e.getSource() == btnModificar){
 	    
@@ -529,9 +584,9 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    String itemSeleccionado = (String) comboCategoria.getSelectedItem();
 	    
 	  //Obtengo el nombre del evento seleccionado en la tabla
-	    String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);
+	    String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);   
 	    
-	    Evento evento = new Evento();
+	    evento = new Evento();
 	    
 	    evento.setNombre(campoNombreEvento.getText().toString());
 	    evento.setFechaInicio(fechaIniciFormateada);
@@ -546,8 +601,20 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    evento.setIdLugar(MetodosBaseDeDatos.consultarIdLugar(campoLlocEvento.getText().toString()));
 	    evento.setIdOrganizador(MetodosBaseDeDatos.consultarIdOrganizador(Login.nombre));
 	    
-	    
 	    MetodosBaseDeDatos.modificarEvento(evento, nombreEvento);
+	    
+	    lugar = new Lugar();
+	    double latitud = Double.parseDouble(campoLatitud.getText().toString());
+	    double longitud = Double.parseDouble(campoLongitud.getText().toString());
+	    //System.out.println("Latitud: " +latitud + "\nLongitud: " + longitud);
+	    
+	    lugar.setDireccion(campoDireccioLloc.getText().toString());
+	    lugar.setCoor_latitud(latitud);
+	    lugar.setCoor_longitud(longitud);
+	    lugar.setInformacion(textAreaImformacioLloc.getText().toString());
+	    lugar.setImagen(campoImagenLloc.getText().toString());
+	    
+	    MetodosBaseDeDatos.modificarLugar(lugar, evento.getIdLugar());
 	    
 	    resetearCampos();
 	   //Primero eliminamos todas las filas de la tabla 
@@ -567,7 +634,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    }
 	    else{
 	    /*Hacemos uso del metodo insertar lugar para luego poder insertar la id del lugar*/
-	    MetodosBaseDeDatos.anyadirLugar(campoLlocEvento.getText().toString()); 
+	    MetodosBaseDeDatos.anyadirLugar(campoLlocEvento.getText().toString(), campoDireccioLloc.getText().toString(),Double.parseDouble(campoLatitud.getText().toString()), Double.parseDouble(campoLongitud.getText().toString()), textAreaImformacioLloc.getText().toString(), campoImagenLloc.getText().toString()); 
 	      
 	    LocalTime horaInicio1 = LocalTime.parse(campoHoraInici.getText().toString() +":"+ campoMinutoInici.getText().toString());
 	    LocalTime horaFin1 = LocalTime.parse(campoHoraFin.getText().toString() +":"+ campoMinutoFin.getText().toString());
@@ -624,10 +691,10 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    try {
 		 Desktop.getDesktop().browse(new URI("https://www.google.es/imghp?hl=es&tab=wi&ei=KH37WKUSwahSxqGU0AM&ved=0EKouCBUoAQ"));
 	    } catch (IOException e1) {
-		 // TODO Auto-generated catch block
+		
 		 e1.printStackTrace();
 	    } catch (URISyntaxException e1) {
-		 // TODO Auto-generated catch block
+		
 		 e1.printStackTrace();
 	    }
 	    
@@ -641,10 +708,10 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    try {
 		 Desktop.getDesktop().browse(new URI("https://www.google.es/imghp?hl=es&tab=wi&ei=KH37WKUSwahSxqGU0AM&ved=0EKouCBUoAQ"));
 	    } catch (IOException e1) {
-		 // TODO Auto-generated catch block
+		
 		 e1.printStackTrace();
 	    } catch (URISyntaxException e1) {
-		 // TODO Auto-generated catch block
+		 
 		 e1.printStackTrace();
 	    }
 	}
@@ -657,7 +724,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 		repaint();
 		//imagenMiniatura.setIcon((Icon) new ImageIcon(new URL(campoImagenUri.getText().toString())).getImage());
 	    } catch (MalformedURLException e1) {
-		// TODO Auto-generated catch block
+	
 		e1.printStackTrace();
 	    }
 	    
@@ -672,7 +739,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 		repaint();
 		
 	    } catch (MalformedURLException e1) {
-		// TODO Auto-generated catch block
+		
 		e1.printStackTrace();
 	    }
 	}
@@ -739,12 +806,19 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    campoImagenUri2.setText("");
 	    imagenMiniatura.setIcon(null);
 	    imagenPrincipal.setIcon(null);
+	    campoDireccioLloc.setText("");
+	    campoLatitud.setText("");
+	    campoLongitud.setText("");
+	    campoImagenLloc.setText("");
+	    textAreaImformacioLloc.setText("");
+	    
     }
     
     public static void dobleClickTable(){
 	
 	//Instancio un objeto de la clase Evento
 	    Evento recuperarDatosEvento = new Evento();
+	    Lugar recuperarDatosLugar = new Lugar();
 	    
 	    //Obtengo el nombre del evento seleccionado en la tabla
 	    String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);
@@ -776,7 +850,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    try {
 		fechaInici = formato.parse(recuperarDatosEvento.getFechaInicio());
 	    } catch (ParseException e3) {
-		// TODO Auto-generated catch block
+		
 		e3.printStackTrace();
 	    }
 	    
@@ -784,7 +858,7 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    try {
 		fechaFin = formato.parse(recuperarDatosEvento.getFechaFin());
 	    } catch (ParseException e3) {
-		// TODO Auto-generated catch block
+		
 		e3.printStackTrace();
 	    }
 	    
@@ -802,25 +876,36 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    campoInformacioSecundaria.setText(recuperarDatosEvento.getInfoSecundaria());
 	    campoImagenUri.setText(recuperarDatosEvento.getFotoMiniatura());
 	    campoImagenUri2.setText(recuperarDatosEvento.getFotoPrincipal());
+	    
 	    try {
 		imagenMiniatura.setIcon(cargarImagenMiniatura(recuperarDatosEvento.getFotoMiniatura()));
 	    } catch (MalformedURLException e2) {
-		// TODO Auto-generated catch block
+	
 		e2.printStackTrace();
 	    }
 	    try {
 		imagenPrincipal.setIcon(cargarImagenPrincipal(recuperarDatosEvento.getFotoPrincipal()));
 	    } catch (MalformedURLException e1) {
-		// TODO Auto-generated catch block
+		
 		e1.printStackTrace();
 	    }
+	    
+	    recuperarDatosLugar = MetodosBaseDeDatos.consultarLugarMarcado(recuperarDatosEvento.getIdLugar());
+	    
+	    campoDireccioLloc.setText(recuperarDatosLugar.getDireccion());
+	    campoLatitud.setText(String.valueOf(recuperarDatosLugar.getCoor_latitud()));
+	    campoLongitud.setText(String.valueOf(recuperarDatosLugar.getCoor_longitud()));
+	    campoImagenLloc.setText(recuperarDatosLugar.getImagen());
+	    textAreaImformacioLloc.setText(recuperarDatosLugar.getInformacion());
+	    
+	    
     }
     //Metodo para mostrar los datos de la tabla
     public static void mostrarDatos(){
 	
-	for(int i = 0; i < MetodosBaseDeDatos.consultarNombreEventos().size(); i++){
+	for(int i = 0; i < MetodosBaseDeDatos.consultarNombreEventos(MetodosBaseDeDatos.consultarIdOrganizador(Login.nombre)).size(); i++){
 		   
-		   modelo.addRow(new Object[]{MetodosBaseDeDatos.consultarNombreEventos().get(i).toString()});
+		   modelo.addRow(new Object[]{MetodosBaseDeDatos.consultarNombreEventos(MetodosBaseDeDatos.consultarIdOrganizador(Login.nombre)).get(i).toString()});
 		   
 		}
     }

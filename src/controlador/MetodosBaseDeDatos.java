@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 
 import conexion.Conexion;
 import modelo.Evento;
+import modelo.Lugar;
 
 
 public class MetodosBaseDeDatos {
@@ -101,6 +102,33 @@ public class MetodosBaseDeDatos {
 	}
     }
     
+  //Metodo para modificar un evento
+    public static void modificarLugar(Lugar lugar, int idLugar) {
+	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
+	Conexion conex = new Conexion();
+	//bloque try - catch
+	try {
+		
+		//Realizar la inserción
+				Statement insercionLugar = conex.getConnection().createStatement();
+				insercionLugar.executeUpdate("UPDATE lugares SET direccion = '"+lugar.getDireccion()+"',"
+					+ " coor_latitud = '"+lugar.getCoor_latitud()+"',"
+					+ " coor_longitud = '"+lugar.getCoor_longitud()+"',"
+					+ " informacion = '"+lugar.getInformacion()+"',"
+					+ " imagen = '"+lugar.getImagen()+"'"
+					+ " WHERE id_lugar = '"+idLugar+"';");
+				
+				JOptionPane.showMessageDialog(null,"Se ha modificado correctamente el evento", "Información",JOptionPane.INFORMATION_MESSAGE);
+				insercionLugar.close();
+			
+		conex.desconectar();
+
+	} catch (SQLException e) {
+		System.out.println(e.getMessage());
+		//JOptionPane.showMessageDialog(null,"No se ha modificado el evento, verifique la consola para ver el error","Error", JOptionPane.ERROR_MESSAGE);
+	}
+    }
+    
     //Metodo consultar evento donde el nombre sea igual a otro
     public static Evento consultarEventoMarcado(String nombreEvento){
 	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
@@ -142,7 +170,41 @@ public class MetodosBaseDeDatos {
 	return evento;
     }
     
-    public static Vector<String> consultarNombreEventos(){
+  //Metodo consultar evento donde el nombre sea igual a otro
+    public static Lugar consultarLugarMarcado(int idLugar){
+	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
+	Conexion conex = new Conexion();
+	
+	//Declaro un arrayList de tipo String
+	Lugar lugar = new Lugar();
+	
+	//bloque try - catch
+	try {
+	    Statement mostrarLugar = conex.getConnection().createStatement();
+	    ResultSet rs = mostrarLugar.executeQuery("SELECT * FROM lugares WHERE id_lugar = '"+idLugar+"';");
+			    
+		 while(rs.next()){
+		     lugar.setDireccion(String.valueOf(rs.getObject("direccion")));
+		     lugar.setCoor_latitud(Double.parseDouble(String.valueOf(rs.getObject("coor_latitud"))));
+		     lugar.setCoor_longitud(Double.parseDouble(String.valueOf(rs.getObject("coor_longitud"))));
+		     lugar.setInformacion(String.valueOf(rs.getObject("informacion")));
+		     lugar.setImagen(String.valueOf(rs.getObject("imagen")));
+		}
+			    
+		 rs.close();
+		 mostrarLugar.close();
+		 conex.desconectar();
+			    
+	} catch (SQLException e) {
+		System.out.println(e.getMessage());
+				
+	}
+	
+	
+	return lugar;
+    }
+    
+    public static Vector<String> consultarNombreEventos(int id){
 	
 	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
 		Conexion conex = new Conexion();
@@ -155,6 +217,7 @@ public class MetodosBaseDeDatos {
 		    Statement mostrarNombreEventos = conex.getConnection().createStatement();
 		    ResultSet rs = mostrarNombreEventos.executeQuery("SELECT * FROM eventos"
 		    	+ " WHERE CONCAT(fecha_fin, ' ', hora_fin) > sysdate()"
+			+ " and idOrganizador = '"+id+"'"
 		    	+ " ORDER BY CONCAT(fecha_fin, ' ', hora_fin );");
 		    
 		    while(rs.next()){
@@ -187,7 +250,7 @@ public class MetodosBaseDeDatos {
 	    ResultSet rs = mostrarCategorias.executeQuery("SELECT * FROM categorias;");
 	    
 	    while(rs.next()){
-		arrayCategorias.add(String.valueOf(rs.getObject("nombre")));
+		arrayCategorias.add(String.valueOf(rs.getObject("nombre_categoria")));
 	    }
 	    
 	    rs.close();
@@ -214,7 +277,7 @@ public class MetodosBaseDeDatos {
 	//bloque try - catch
 	try {
 	    Statement mostrarIdCategorias = conex.getConnection().createStatement();
-	    ResultSet rs = mostrarIdCategorias.executeQuery("SELECT * FROM categorias WHERE nombre = '"+nombreCategoria+"';");
+	    ResultSet rs = mostrarIdCategorias.executeQuery("SELECT * FROM categorias WHERE nombre_categoria = '"+nombreCategoria+"';");
 	    
 	    while(rs.next()){
 		idCategoria = (int) rs.getObject("id_categoria");
@@ -233,7 +296,7 @@ public class MetodosBaseDeDatos {
     }
     
     //Metodo para insertar un lugar
-    public static void anyadirLugar(String nombreEvento) {
+    public static void anyadirLugar(String nombreEvento, String direccion, double latitud, double longitud, String informacion, String imagen) {
 	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
 	Conexion conex = new Conexion();
 	//bloque try - catch
@@ -241,8 +304,8 @@ public class MetodosBaseDeDatos {
 	    
 	    	//Realizar la inserción
 		Statement insercionEvento = conex.getConnection().createStatement();//, direccion, horario, coor_latitud, coor_longitud, informacion, imagen
-		insercionEvento.executeUpdate("INSERT INTO lugares(nombre)"
-			+ " VALUES ('" + nombreEvento + "')");//, 'C/Prueba', '23:00', 23.5, 26.8, 'Informacion de prueba', 'prueba prueba'
+		insercionEvento.executeUpdate("INSERT INTO lugares(nombreLugar, direccion, coor_latitud, coor_longitud, informacion, imagen)"
+			+ " VALUES ('" + nombreEvento + "', '"+direccion+"', '"+latitud+"', '"+longitud+"', '"+informacion+"', '"+imagen+"')");//, 'C/Prueba', '23:00', 23.5, 26.8, 'Informacion de prueba', 'prueba prueba'
 		
 		//JOptionPane.showMessageDialog(null,"Se ha registrado Exitosamente", "Información",JOptionPane.INFORMATION_MESSAGE);
 		insercionEvento.close();
@@ -265,7 +328,7 @@ public class MetodosBaseDeDatos {
 	//bloque try - catch
 	try {
 	    Statement mostrarCategorias = conex.getConnection().createStatement();
-	    ResultSet rs = mostrarCategorias.executeQuery("SELECT * FROM lugares WHERE nombre = '"+nombreLugar+"';");
+	    ResultSet rs = mostrarCategorias.executeQuery("SELECT * FROM lugares WHERE nombreLugar = '"+nombreLugar+"';");
 	    
 	    while(rs.next()){
 		idLugar = (int) rs.getObject("id_lugar");
@@ -297,7 +360,7 @@ public class MetodosBaseDeDatos {
 	    ResultSet rs = mostrarCategorias.executeQuery("SELECT * FROM lugares WHERE id_lugar = '"+idLugar+"';");
 	    
 	    while(rs.next()){
-		nombreLugar = String.valueOf(rs.getObject("nombre"));
+		nombreLugar = String.valueOf(rs.getObject("nombreLugar"));
 	    }
 	    
 	    rs.close();
@@ -311,8 +374,6 @@ public class MetodosBaseDeDatos {
 	
 	return nombreLugar;
     }
-    	
-    	
     	
     	//Metodo para sacar la id del organizador
     	public static int consultarIdOrganizador(String nombreOrganizador){
@@ -362,6 +423,6 @@ public class MetodosBaseDeDatos {
 	}
     	    
     	}
-    
+   
 
 }

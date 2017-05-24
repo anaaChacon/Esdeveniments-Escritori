@@ -24,6 +24,8 @@ public class Evento {
     private int idCategoria;
     private int idLugar;
     private int idOrganizador;
+    
+    public Evento(){}
   
     //Getters and setters
     public String getNombre() {
