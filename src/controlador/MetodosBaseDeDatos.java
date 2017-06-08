@@ -32,6 +32,38 @@ public class MetodosBaseDeDatos {
   		return formato.format(fecha);
   	}
   	
+  	
+	public static boolean comprobarRegistro(String user, String pass, String nombre, String nif, String direccion, String email){
+  	    Conexion conex = new Conexion();
+  	    boolean insercion = false;
+  	    
+  	    try{
+  		//Realizar la inserción
+  		Statement registro = conex.getConnection().createStatement();
+  		ResultSet rs = registro.executeQuery("Select * from organizadores"
+  							+ " where username = '"+user+"'"
+  							+ " or nif = '"+nif+"'"
+  							+ " or email = '"+email+"';");
+  				
+  		if(rs.absolute(1)){
+  			JOptionPane.showMessageDialog(null,"Ya existe un usuario con estos datos.", "Información",JOptionPane.INFORMATION_MESSAGE);  					
+  			insercion = false;
+  		}else{
+  			registro.executeUpdate("INSERT INTO organizadores(username, password, nombre, nif, direccion, email)" 
+						    + "VALUES('"+user+"', '"+pass+"', '"+nombre+"', '"+nif+"', '"+direccion+"', '"+email+"');");
+  			insercion = true;
+  		}
+  		
+  		rs.close();
+  		registro.close();
+  		conex.desconectar();
+  	    }catch(SQLException e){
+  		System.out.println(e.getMessage());
+		JOptionPane.showMessageDialog(null,"No se Registro usuario, verifique la consola para ver el error","Error", JOptionPane.ERROR_MESSAGE);
+  	    }
+  	    
+  	    return insercion;
+  	}
     
     //Metodo para añadir un evento
     public static void anyadirEvento(Evento evento) {
@@ -58,7 +90,7 @@ public class MetodosBaseDeDatos {
 				+ evento.getFotoPrincipal() + "', '"
 				+ evento.getIdCategoria() + "', '"
 				+ evento.getIdLugar() + "', '"
-				+ evento.getIdOrganizador() + "')");
+				+ evento.getIdOrganizador() + "');");
 		
 		JOptionPane.showMessageDialog(null,"Se ha registrado correctamente el evento", "Información",JOptionPane.INFORMATION_MESSAGE);
 		insercionEvento.close();
@@ -117,8 +149,6 @@ public class MetodosBaseDeDatos {
 					+ " informacion = '"+lugar.getInformacion()+"',"
 					+ " imagen = '"+lugar.getImagen()+"'"
 					+ " WHERE id_lugar = '"+idLugar+"';");
-				
-				JOptionPane.showMessageDialog(null,"Se ha modificado correctamente el evento", "Información",JOptionPane.INFORMATION_MESSAGE);
 				insercionLugar.close();
 			
 		conex.desconectar();
@@ -296,7 +326,7 @@ public class MetodosBaseDeDatos {
     }
     
     //Metodo para insertar un lugar
-    public static void anyadirLugar(String nombreEvento, String direccion, double latitud, double longitud, String informacion, String imagen) {
+    public static void anyadirLugar(Lugar lugar) {
 	//Instanciamos la clase Conexion para establecer la conexión a la base de datos
 	Conexion conex = new Conexion();
 	//bloque try - catch
@@ -305,7 +335,7 @@ public class MetodosBaseDeDatos {
 	    	//Realizar la inserción
 		Statement insercionEvento = conex.getConnection().createStatement();//, direccion, horario, coor_latitud, coor_longitud, informacion, imagen
 		insercionEvento.executeUpdate("INSERT INTO lugares(nombreLugar, direccion, coor_latitud, coor_longitud, informacion, imagen)"
-			+ " VALUES ('" + nombreEvento + "', '"+direccion+"', '"+latitud+"', '"+longitud+"', '"+informacion+"', '"+imagen+"')");//, 'C/Prueba', '23:00', 23.5, 26.8, 'Informacion de prueba', 'prueba prueba'
+			+ " VALUES('"+lugar.getNombreLugar()+"', '"+lugar.getDireccion()+"', '"+lugar.getCoor_latitud()+"', '"+lugar.getCoor_longitud()+"', '"+lugar.getInformacion()+"', '"+lugar.getImagen()+"');");//, 'C/Prueba', '23:00', 23.5, 26.8, 'Informacion de prueba', 'prueba prueba'
 		
 		//JOptionPane.showMessageDialog(null,"Se ha registrado Exitosamente", "Información",JOptionPane.INFORMATION_MESSAGE);
 		insercionEvento.close();

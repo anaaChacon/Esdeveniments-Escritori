@@ -352,12 +352,14 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	
 	campoImagenUri = new JTextField();
 	campoImagenUri.setBounds(1048, 174, 255, 26);
+	campoImagenUri.setEditable(true);
 	contentPane.add(campoImagenUri);
 	campoImagenUri.setColumns(10);
 	
 	campoImagenUri2 = new JTextField();
 	campoImagenUri2.setColumns(10);
 	campoImagenUri2.setBounds(1048, 294, 255, 26);
+	campoImagenUri2.setEditable(true);
 	contentPane.add(campoImagenUri2);
 	
 	botonBuscar = new JButton("Buscar imagen");
@@ -474,12 +476,10 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	contentPane.add(lblLatitud);
 	
 	campoLatitud = new JTextField();
-	campoLatitud.setColumns(10);
 	campoLatitud.setBounds(347, 583, 164, 26);
 	contentPane.add(campoLatitud);
 	
 	campoLongitud = new JTextField();
-	campoLongitud.setColumns(10);
 	campoLongitud.setBounds(347, 645, 164, 26);
 	contentPane.add(campoLongitud);
 	
@@ -525,8 +525,6 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	Image otraRefresca = imgRefresca.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 	ImageIcon iconRefresca = new ImageIcon(otraRefresca);
 	btnExit.setIcon(iconRefresca);
-	
-	btnExit.setBorderPainted(false);
 	btnExit.setContentAreaFilled(false);
 	btnExit.setFocusable(false);
 	btnExit.setRolloverEnabled(true);
@@ -557,7 +555,8 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 	
 	if(e.getSource() == btnExit){
-	    System.exit(0);
+	    setVisible(false);
+	    new Login().setVisible(true);
 	}
 	
 	if(e.getSource() == btnModificar){
@@ -634,7 +633,16 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    }
 	    else{
 	    /*Hacemos uso del metodo insertar lugar para luego poder insertar la id del lugar*/
-	    MetodosBaseDeDatos.anyadirLugar(campoLlocEvento.getText().toString(), campoDireccioLloc.getText().toString(),Double.parseDouble(campoLatitud.getText().toString()), Double.parseDouble(campoLongitud.getText().toString()), textAreaImformacioLloc.getText().toString(), campoImagenLloc.getText().toString()); 
+	    Lugar lugar = new Lugar();
+	    
+	    lugar.setNombreLugar(campoLlocEvento.getText().toString());
+	    lugar.setDireccion(campoDireccioLloc.getText().toString());
+	    lugar.setCoor_latitud(Double.parseDouble(campoLatitud.getText().toString()));
+	    lugar.setCoor_longitud(Double.parseDouble(campoLongitud.getText().toString()));
+	    lugar.setInformacion(textAreaImformacioLloc.getText().toString());
+	    lugar.setImagen(campoImagenLloc.getText().toString());
+		
+	    MetodosBaseDeDatos.anyadirLugar(lugar); 
 	      
 	    LocalTime horaInicio1 = LocalTime.parse(campoHoraInici.getText().toString() +":"+ campoMinutoInici.getText().toString());
 	    LocalTime horaFin1 = LocalTime.parse(campoHoraFin.getText().toString() +":"+ campoMinutoFin.getText().toString());
@@ -677,10 +685,15 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	
 	if(e.getSource() == btnEliminar){
 	    
-	    String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);
-	    modelo.removeRow(table_1.getSelectedRow());
-	   
-	    MetodosBaseDeDatos.eliminarEvento(nombreEvento);
+	    if(table_1.getSelectedRow() < 0){
+		JOptionPane.showMessageDialog(null,"No ha seleccionado ningún evento.","Advertencia!", JOptionPane.WARNING_MESSAGE);
+	    }else{
+		String nombreEvento = (String) modelo.getValueAt(table_1.getSelectedRow(), 0);
+		modelo.removeRow(table_1.getSelectedRow());
+		   
+	        MetodosBaseDeDatos.eliminarEvento(nombreEvento);
+	        JOptionPane.showMessageDialog(null,"Se ha eliminado el evento '"+nombreEvento+"'." , "Advertencia!", JOptionPane.WARNING_MESSAGE);
+	    }
 	}
 	
 	if(e.getSource() == botonBuscar){
@@ -724,8 +737,8 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 		repaint();
 		//imagenMiniatura.setIcon((Icon) new ImageIcon(new URL(campoImagenUri.getText().toString())).getImage());
 	    } catch (MalformedURLException e1) {
-	
-		e1.printStackTrace();
+		JOptionPane.showMessageDialog(null,"La imagen seleccionada no existe.","Advertencia!", JOptionPane.WARNING_MESSAGE);
+		campoImagenUri.setEditable(true);
 	    }
 	    
 	}
@@ -739,8 +752,8 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 		repaint();
 		
 	    } catch (MalformedURLException e1) {
-		
-		e1.printStackTrace();
+		JOptionPane.showMessageDialog(null,"La imagen seleccionada no existe.","Advertencia!", JOptionPane.WARNING_MESSAGE);
+		campoImagenUri2.setEditable(true);
 	    }
 	}
 	
@@ -811,6 +824,8 @@ public class PanelGestionarEvent extends JFrame implements ActionListener {
 	    campoLongitud.setText("");
 	    campoImagenLloc.setText("");
 	    textAreaImformacioLloc.setText("");
+	    campoImagenUri.setEditable(true);
+	    campoImagenUri2.setEditable(true);
 	    
     }
     

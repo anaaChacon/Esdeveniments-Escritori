@@ -1,12 +1,6 @@
 package conexion;
-
 import java.sql.*;
 
-/**
- * Clase que permite conectar con la base de datos
- * @author jrsimo
- *
- */
 public class Conexion {
    static String bd = "qxm773";//u468011279_event
    static String login = "admin";//admin, root,u468011279_ana
@@ -15,16 +9,13 @@ public class Conexion {
 
    Connection conn = null;
 
-   /** Constructor de DbConnection */
    public Conexion() {
       try{
          //obtenemos el driver de para mysql
          Class.forName("com.mysql.jdbc.Driver");
          //obtenemos la conexión
          conn = DriverManager.getConnection(url,login,password);
-
          if (conn!=null){
-           // System.out.println("Conección a base de datos "+bd+" OK");
          }
       }
       catch(SQLException e){

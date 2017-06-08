@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,8 +33,8 @@ import java.awt.SystemColor;
 public class Login extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private JTextField txtUsuari;
-	private JPasswordField txtContrasenya;
+	public JTextField txtUsuari;
+	public JPasswordField txtContrasenya;
 	private JButton btnNewButton;
 	public static String nombre;
 	private Border emptyBorder;
@@ -65,7 +66,6 @@ public class Login extends JFrame implements ActionListener {
 		setTitle("València Events");
 		ImageIcon logoV = new ImageIcon("./imagenes/login.png");
 		Image logo = logoV.getImage();
-		
 		setIconImage(logo);
 		//setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
@@ -84,27 +84,29 @@ public class Login extends JFrame implements ActionListener {
 		lblValnciaEvents.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblValnciaEvents);
 		JPanel panel = new JPanel();
-		panel.setBounds(485, 157, 384, 354);
+		panel.setBounds(439, 157, 489, 354);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		JLabel lblNewLabel = new JLabel("Accedir");
 		lblNewLabel.setForeground(SystemColor.desktop);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Roboto Th", Font.PLAIN, 72));
-		lblNewLabel.setBounds(0, 21, 384, 63);
+		lblNewLabel.setBounds(0, 21, 489, 63);
 		panel.add(lblNewLabel);
 		txtUsuari = new JTextField();
 		txtUsuari.setForeground(SystemColor.activeCaptionBorder);
 		txtUsuari.setHorizontalAlignment(SwingConstants.CENTER);
 		txtUsuari.setFont(new Font("Roboto Lt", Font.ITALIC, 22));
-		txtUsuari.setBounds(50, 113, 289, 41);
+		txtUsuari.setBounds(160, 113, 289, 41);
+		
+		
 		panel.add(txtUsuari);
 		txtUsuari.setColumns(10);
 		txtContrasenya = new JPasswordField();
 		txtContrasenya.setForeground(SystemColor.activeCaptionBorder);
 		txtContrasenya.setHorizontalAlignment(SwingConstants.CENTER);
 		txtContrasenya.setFont(new Font("Roboto Lt", Font.ITALIC, 20));
-		txtContrasenya.setBounds(50, 165, 289, 41);
+		txtContrasenya.setBounds(160, 165, 289, 41);
 		panel.add(txtContrasenya);
 		txtContrasenya.setColumns(10);
 		btnNewButton = new JButton("ENTRAR");
@@ -114,14 +116,54 @@ public class Login extends JFrame implements ActionListener {
 		btnNewButton.setFont(new Font("Roboto Bk", Font.PLAIN, 24));
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(new Color(63, 127, 188));
-		btnNewButton.setBounds(126, 227, 135, 48);
+		btnNewButton.setBounds(170, 226, 135, 48);
 		panel.add(btnNewButton);
 		JLabel lblVolsAfecgirEls = new JLabel("Vols afegir els teus esdeveniments? Registrat!");
 		lblVolsAfecgirEls.setFont(new Font("Roboto Lt", Font.PLAIN, 15));
 		lblVolsAfecgirEls.setForeground(Color.BLACK);
 		lblVolsAfecgirEls.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVolsAfecgirEls.setBounds(0, 313, 384, 30);
+		lblVolsAfecgirEls.setBounds(0, 313, 489, 30);
+		lblVolsAfecgirEls.addMouseListener(new MouseListener(){
+		    public void mouseClicked(MouseEvent e){
+			setVisible(false);
+			new Registro().setVisible(true);
+		    }
+
+		    @Override
+		    public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		    }
+
+		    @Override
+		    public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		    }
+
+		    @Override
+		    public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		    }
+
+		    @Override
+		    public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		    }
+		      
+		});
+		lblVolsAfecgirEls.setToolTipText("Haga clic para registrarse");
 		panel.add(lblVolsAfecgirEls);
+		
+		JLabel lblNewLabel_1 = new JLabel("Usuario");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 19));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_1.setBounds(30, 114, 120, 41);
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Contrase\u00F1a");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 19));
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_2.setBounds(30, 165, 120, 41);
+		panel.add(lblNewLabel_2);
 		
 		JLabel lblValenciaeventsnet = new JLabel("www.valenciaevents.net");
 		lblValenciaeventsnet.setFont(new Font("Roboto Th", Font.PLAIN, 66));
@@ -145,6 +187,8 @@ public class Login extends JFrame implements ActionListener {
 		});
 		contentPane.add(lblValenciaeventsnet);
 	}
+	
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
